@@ -1,0 +1,6 @@
+{
+  "name": "SoilSense",
+  "description": "College Machine Learning web dashboard for classifying soil types using a Decision Tree model.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
