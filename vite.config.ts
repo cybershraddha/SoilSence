@@ -5,7 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(({ command }) => {
   return {
-    base: command === 'build' ? '/SoilSense/' : '/',
+    base: command === 'build' ? '/SoilSence/' : '/',
     plugins: [react(), tailwindcss()],
     build: {
       rollupOptions: {
