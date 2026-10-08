@@ -7,6 +7,16 @@ export default defineConfig(({ command }) => {
   return {
     base: command === 'build' ? '/SoilSense/' : '/',
     plugins: [react(), tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          assetFileNames: (assetInfo) =>
+            assetInfo.name === 'index.css'
+              ? 'assets/Index-[hash][extname]'
+              : 'assets/[name]-[hash][extname]',
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
