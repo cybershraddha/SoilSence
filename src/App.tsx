@@ -50,12 +50,51 @@ export default function App() {
     navigateTo('insights');
   };
 
-  const handlePredict = (inputs: SoilInputs) => {
-    setCurrentInputs(inputs);
+  
+const handlePredict = async (inputs: SoilInputs) => {
+  setCurrentInputs(inputs);
+
+  try {
+    const response = await fetch(
+      'https://soilsense-api.onrender.com/predict',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+  sand_pct: Number(inputs.sand_pct),
+  silt_pct: Number(inputs.silt_pct),
+  clay_pct: Number(inputs.clay_pct),
+  moisture_pct: Number(inputs.moisture_pct),
+  organic_matter_pct: Number(inputs.organic_matter_pct),
+  nitrogen_mg_kg: Number(inputs.nitrogen_mg_kg),
+  phosphorus_mg_kg: Number(inputs.phosphorus_mg_kg),
+  potassium_mg_kg: Number(inputs.potassium_mg_kg),
+  ph: Number(inputs.ph),
+}),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Backend prediction failed');
+    }
+
+    const data = await response.json();
     const result = evaluateDecisionTree(inputs);
-    setPredictionResult(result);
+
+    setPredictionResult({
+      ...result,
+      predictedClass: data.predicted_soil_type,
+    });
+
     navigateTo('result');
-  };
+  } catch (error) {
+    console.error('Prediction error:', error);
+    alert('Prediction failed. Please check the backend connection.');
+  }
+};
+
 
   const handleAnalyzeAnother = () => {
     setCurrentInputs(null);
