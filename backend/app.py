@@ -1,50 +1,50 @@
-
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import pandas as pd
 
-app = Flask(__name__)
+app = Flask(_name_)
 
-CORS(
-    app,
-    resources={
-        r"/*": {
-            "origins": [
-                "https://cybershraddha.github.io"
-            ]
-        }
-    },
-    methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type"]
-)
+# CORS - Allow your GitHub Pages domain
+CORS(app, resources={
+    r"/*": {
+        "origins": ["https://cybershraddha.github.io", "http://localhost:*"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 
-model = joblib.load("soil_model.pkl")
+# Load model with proper path
+BASE_DIR = os.path.dirname(os.path.abspath(_file_))
+MODEL_PATH = os.path.join(BASE_DIR, "soil_model.pkl")
+
+try:
+    model = joblib.load(MODEL_PATH)
+    print("✅ Model loaded successfully!")
+except Exception as e:
+    print(f"❌ Error loading model: {e}")
+    raise
 
 FEATURES = [
-    "sand_pct",
-    "silt_pct",
-    "clay_pct",
-    "moisture_pct",
-    "organic_matter_pct",
-    "nitrogen_mg_kg",
-    "phosphorus_mg_kg",
-    "potassium_mg_kg",
-    "ph"
+    "sand_pct", "silt_pct", "clay_pct", "moisture_pct",
+    "organic_matter_pct", "nitrogen_mg_kg", "phosphorus_mg_kg",
+    "potassium_mg_kg", "ph"
 ]
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
-    return jsonify({
-        "message": "SoilSense ML API is running!"
-    })
+    return jsonify({"message": "SoilSense ML API is running!", "status": "success"})
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST", "OPTIONS"])
 def predict():
+    if request.method == "OPTIONS":
+        return jsonify({"message": "CORS preflight successful"}), 200
+
     data = request.get_json(silent=True)
 
-    if not isinstance(data, dict):
-        return jsonify({"error": "Send soil values as JSON"}), 400
+    if not data:
+        return jsonify({"error": "Invalid JSON data"}), 400
 
     try:
         values = {feature: float(data[feature]) for feature in FEATURES}
@@ -52,22 +52,14 @@ def predict():
         prediction = model.predict(sample)[0]
 
         return jsonify({
+            "status": "success",
             "predicted_soil_type": str(prediction)
         })
-    except (KeyError, TypeError, ValueError):
-        return jsonify({
-            "error": "Please provide all 9 features as numeric values"
-        }), 400
-@app.route("/routes", methods=["GET"])
-def show_routes():
-    return jsonify({
-        "routes": [
-            {
-                "path": str(rule),
-                "methods": sorted(rule.methods)
-            }
-            for rule in app.url_map.iter_rules()
-        ]
-    })
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    except KeyError as e:
+        return jsonify({"error": f"Missing feature: {str(e)}"}), 400
+    except (TypeError, ValueError):
+        return jsonify({"error": "All values must be numbers"}), 400
+
+if _name_ == "_main_":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
