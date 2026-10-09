@@ -1,6 +1,6 @@
 import { ArrowRight, CheckCircle2, Database, Leaf, Zap } from 'lucide-react';
-import heroImage from '../assets/images/soil-bg.png";
-import soilVisual from '../assets/images/soil-side.png";
+import heroImage from '../assets/images/soil-bg.png';
+import soilVisual from '../assets/images/soil-side.png';
 
 interface HeroProps {
   onStartAnalysis: () => void;
