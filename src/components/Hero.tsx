@@ -18,7 +18,7 @@ export const Hero = ({ onStartAnalysis }: HeroProps) => {
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_35%,rgba(16,185,129,0.10),transparent_34%),linear-gradient(90deg,rgba(0,0,0,0.70)_0%,rgba(0,0,0,0.40)_45%,rgba(0,0,0,0.16)_100%)]" />
 
-      <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-center px-6 pt-32 sm:px-10 lg:px-14 lg:pt-14 xl:px-16">
+      <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-center px-6 pt-32 sm:px-10 lg:px-14 lg:pt-28 xl:px-16">
         <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-12">
           <div className="max-w-[760px] pb-8 lg:pb-0">
             <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-emerald-400/25 bg-emerald-950/35 px-4 py-2 text-sm font-semibold text-emerald-300 backdrop-blur-md">
