@@ -1,10 +1,10 @@
-import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import pandas as pd
+import os
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # CORS - Allow your GitHub Pages domain
 CORS(app, resources={
@@ -16,7 +16,7 @@ CORS(app, resources={
 })
 
 # Load model with proper path
-BASE_DIR = os.path.dirname(os.path.abspath(_file_))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "soil_model.pkl")
 
 try:
@@ -27,14 +27,23 @@ except Exception as e:
     raise
 
 FEATURES = [
-    "sand_pct", "silt_pct", "clay_pct", "moisture_pct",
-    "organic_matter_pct", "nitrogen_mg_kg", "phosphorus_mg_kg",
-    "potassium_mg_kg", "ph"
+    "sand_pct",
+    "silt_pct",
+    "clay_pct",
+    "moisture_pct",
+    "organic_matter_pct",
+    "nitrogen_mg_kg",
+    "phosphorus_mg_kg",
+    "potassium_mg_kg",
+    "ph"
 ]
 
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({"message": "SoilSense ML API is running!", "status": "success"})
+    return jsonify({
+        "message": "SoilSense ML API is running!",
+        "status": "success"
+    })
 
 @app.route("/predict", methods=["POST", "OPTIONS"])
 def predict():
@@ -60,6 +69,6 @@ def predict():
     except (TypeError, ValueError):
         return jsonify({"error": "All values must be numbers"}), 400
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
