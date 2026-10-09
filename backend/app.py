@@ -5,7 +5,19 @@ import joblib
 import pandas as pd
 
 app = Flask(__name__)
-CORS(app)
+
+CORS(
+    app,
+    resources={
+        r"/*": {
+            "origins": [
+                "https://cybershraddha.github.io"
+            ]
+        }
+    },
+    methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"]
+)
 
 model = joblib.load("soil_model.pkl")
 
