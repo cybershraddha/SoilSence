@@ -56,7 +56,7 @@ const handlePredict = async (inputs: SoilInputs) => {
 
   try {
     const response = await fetch(
-      'https://soilsense-api-new.onrender.com/predict',
+      'https://soilsense-65uj.onrender.com/predict',
       {
         method: 'POST',
         headers: {
